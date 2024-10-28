@@ -26,6 +26,7 @@ public:
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 protected:
+
 	// Reliable means it's guaranteed to reach the client even in the case of packet loss, it'll be sent until
 	// it receives confirmation that it has been received.
 	
