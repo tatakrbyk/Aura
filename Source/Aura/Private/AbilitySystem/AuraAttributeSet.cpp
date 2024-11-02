@@ -69,7 +69,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	// Resistane Attributes
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, FireResistance , COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, FireResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
@@ -189,6 +189,12 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.SourceCharacter->Controller))
 		{
 			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
+			return;
+		}
+
+		if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Props.TargetCharacter->Controller))
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
 	}
 }
@@ -290,5 +296,5 @@ void UAuraAttributeSet::OnRep_ArcaneResistance(const FGameplayAttributeData& Old
 
 void UAuraAttributeSet::OnRep_PhysicalResistance(const FGameplayAttributeData& OldPhysicalResistance) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, PhysicalResistance, OldPhysicalResistance );
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, PhysicalResistance, OldPhysicalResistance);
 }

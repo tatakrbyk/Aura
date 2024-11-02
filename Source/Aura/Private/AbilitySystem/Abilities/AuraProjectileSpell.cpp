@@ -22,10 +22,11 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;
 
-	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo());
+	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(
+		GetAvatarActorFromActorInfo(),
+		FAuraGameplayTags::Get().Montage_Attack_Weapon);
 	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 
-	
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(SocketLocation);
 	SpawnTransform.SetRotation(Rotation.Quaternion());
@@ -36,7 +37,6 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		GetOwningActorFromActorInfo(),
 		Cast<APawn>(GetOwningActorFromActorInfo()),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-		
 
 	const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 	FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
@@ -49,10 +49,10 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	HitResult.Location = ProjectileTargetLocation;
 	EffectContextHandle.AddHitResult(HitResult);
 
-	const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), EffectContextHandle);		
+	const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), EffectContextHandle);
 
 	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
-		
+
 	for (auto& Pair : DamageTypes)
 	{
 		const float ScaledDamage = Pair.Value.GetValueAtLevel(GetAbilityLevel());
@@ -60,7 +60,7 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	}
 
 	Projectile->DamageEffectSpecHandle = SpecHandle;
-		
+
 	Projectile->FinishSpawning(SpawnTransform);
 
 	
