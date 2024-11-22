@@ -8,8 +8,13 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "CombatInterface.generated.h"
 
+class UAbilitySystemComponent;
 class UNiagaraSystem;
 class UAnimMontage;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnASCRegistered, UAbilitySystemComponent*)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathSignature, AActor*, DeadActor);
+
 
 USTRUCT(BlueprintType)
 struct FTaggedMontage
@@ -42,7 +47,7 @@ class UCombatInterface : public UInterface
 class AURA_API ICombatInterface
 {
 	GENERATED_BODY()
-
+	 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
@@ -59,7 +64,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) /*BlueprintNativeEvent CPP-> add virtual _Implemantation override or BP override*/
 	UAnimMontage* GetHitReactMontage();
 
-	virtual void Die() = 0;
+	virtual void Die(const FVector& DeathImpulse) = 0;
+	virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool IsDead() const;
@@ -84,4 +90,12 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	ECharacterClass GetCharacterClass();
+	
+	virtual FOnASCRegistered GetOnASCRegisteredDelegate() = 0;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetInShockLoop(bool bInLoop); 
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	USkeletalMeshComponent* GetWeapon();
 };
