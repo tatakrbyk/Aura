@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.2",
+	"EngineAssociation": "5.4",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -15,7 +15,8 @@
 				"CoreUObject",
 				"EnhancedInput",
 				"AIModule",
-				"Niagara"
+				"Niagara",
+				"ModelViewViewModel"
 			]
 		}
 	],
@@ -28,11 +29,15 @@
 			]
 		},
 		{
+			"Name": "MotionWarping",
+			"Enabled": true
+		},
+		{
 			"Name": "GameplayAbilities",
 			"Enabled": true
 		},
 		{
-			"Name": "MotionWarping",
+			"Name": "ModelViewViewModel",
 			"Enabled": true
 		}
 	]
